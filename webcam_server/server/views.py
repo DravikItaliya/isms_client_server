@@ -1,37 +1,29 @@
-from django.shortcuts import render
-from django.shortcuts import render, HttpResponse, redirect
-from django.http import HttpResponseRedirect
-from django.http.response import StreamingHttpResponse
-from django.urls import reverse
-import pickle
 import os
-import schedule
-import time
-import mysql.connector
-import face_recognition
-import collections
-import cv2
-import pytesseract
-import datetime
-import numpy as np
-import imutils
-from django.contrib import messages
-import datetime
+
+from django.shortcuts import render, HttpResponse, redirect
 from django.views.decorators.csrf import csrf_exempt
+from pybase64 import b64decode
+import time
 
 
 @csrf_exempt
-def process_image(request):
+def save_image(request):
     print("HELLO!!!")
     if request.method == 'POST':
-        print(request.POST.get('data', ""))
-        # with open("./static/images/temp/1.png", 'w') as f:
-        #    f.write(request.POST['image'])
+        # print(request.POST.get('image', ""))
+        with open(
+                f"D:/WhitespaceVoid/Projects/PycharmProjects/New_Bitch/webcam_server/server/static/images/temp/{time.strftime('%Y%m%d-%H%M%S')}.png",
+                'wb') as f:
+            img_data = request.POST['image']
+            format, imgstr = img_data.split(';base64,')
+            f.write(b64decode(imgstr))
+    if len(os.listdir('D:/WhitespaceVoid/' +
+                      'Projects/PycharmProjects/' +
+                      'New_Bitch/webcam_server/server/static/images/temp/')) == 5:
 
     return HttpResponse("uploaded")
 
 
 def index(request):
-    print("BOBO")
+    # print("BOBO")
     return render(request, 'index.html')
-
